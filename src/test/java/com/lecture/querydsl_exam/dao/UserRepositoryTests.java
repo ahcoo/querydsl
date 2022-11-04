@@ -1,18 +1,25 @@
 package com.lecture.querydsl_exam.dao;
 
+import com.lecture.querydsl_exam.user.dao.UserRepository;
 import com.lecture.querydsl_exam.user.domain.SiteUser;
-import com.lecture.querydsl_exam.user.domain.dao.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
+@ActiveProfiles("test")
+//        @Transactional //Test가 끝나고 롤백됨
 public class UserRepositoryTests {
 
         @Autowired
@@ -21,18 +28,30 @@ public class UserRepositoryTests {
         @Test
         @DisplayName("회원 생성")
         void t1() {
-            SiteUser u1 = SiteUser.builder()
-                    .username("user1")
+
+            SiteUser u3 = SiteUser.builder()
+                    .username("user3")
                     .password("{noop}1234")
-                    .email("user1@test.com")
+                    .email("user3@test.com")
                     .build();
-            SiteUser u2 = SiteUser.builder()
-                    .username("user2")
+            SiteUser u4 = SiteUser.builder()
+                    .username("user4")
                     .password("{noop}1234")
-                    .email("user2@test.com")
+                    .email("user4@test.com")
+                    .build();
+            SiteUser u5 = SiteUser.builder()
+                    .username("user5")
+                    .password("{noop}1234")
+                    .email("user5@test.com")
+                    .build();
+            SiteUser u6 = SiteUser.builder()
+                    .username("user6")
+                    .password("{noop}1234")
+                    .email("user6@test.com")
                     .build();
 
-            userRepository.saveAll(Arrays.asList(u1, u2));
+            userRepository.saveAll(Arrays.asList(u3, u4, u5, u6));
+            System.out.println("ArraysList : " + Arrays.asList());
         }
 
         @Test
@@ -45,6 +64,27 @@ public class UserRepositoryTests {
                 assertThat(su.getPassword()).isEqualTo("{noop}1234");
                 assertThat(su.getEmail()).isEqualTo("user1@test.com");
             }
+
+    @Test
+    @DisplayName("회원 수 조회")
+    void t3() {
+        long count = userRepository.getQslUserCount();
+        assertThat(count)
+                .isEqualTo(2);
+    }
+
+
+    @Test
+    @DisplayName("회원 가장오래된순으로 정렬후 조회")
+    void t4() {
+        List<SiteUser> users = userRepository.getQslUsersOrderByAsc();
+        assertThat(users.get(0).getId())
+                .isEqualTo(1);
+    }
+
+
+
+
     }
 
 

@@ -34,6 +34,8 @@ dependencies {
 	//QueryDSL 추가
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+	// p6spy 추가
+	implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0")
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
