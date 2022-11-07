@@ -13,5 +13,7 @@ public interface UserRepositoryCustom {
 
 
     List<SiteUser> getQslUsersOrderByAsc();
+
+    List<SiteUser> getQslUsersByInterestkeyword(String content);
 }
 

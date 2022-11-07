@@ -97,6 +97,17 @@ public class UserRepositoryTests {
 
     }
 
+    @Test
+    @DisplayName("조인 테스트")
+    void t6() {
+            List<SiteUser> users = userRepository.getQslUsersByInterestkeyword("축구");
+
+        System.out.println(users.size());
+
+        System.out.println("1번 : " + users.get(0).getUsername());
+
+//            assertThat(users.size());
+    }
 
 
 
