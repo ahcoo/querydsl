@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.transaction.Transactional;
@@ -80,6 +81,20 @@ public class UserRepositoryTests {
         List<SiteUser> users = userRepository.getQslUsersOrderByAsc();
         assertThat(users.get(0).getId())
                 .isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("회원에게 관심사 등록")
+    @Rollback(value = false)
+    void t5() {
+            SiteUser su = userRepository.findById(2L).orElseThrow();
+
+            su.addInterestKeywordContent("축구");
+            su.addInterestKeywordContent("농구");
+            su.addInterestKeywordContent("달리기");
+            su.addInterestKeywordContent("달리기");
+
+
     }
 
 
