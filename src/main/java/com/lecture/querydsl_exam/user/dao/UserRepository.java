@@ -8,4 +8,5 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<SiteUser, Long>, UserRepositoryCustom {
 
 
+    List<SiteUser> findByInterestKeywords_content(String keywordContent);
 }

@@ -14,6 +14,6 @@ public interface UserRepositoryCustom {
 
     List<SiteUser> getQslUsersOrderByAsc();
 
-    List<SiteUser> getQslUsersByInterestkeyword(String content);
+    List<SiteUser> getQslUsersByInterestKeyword(String content);
 }
 

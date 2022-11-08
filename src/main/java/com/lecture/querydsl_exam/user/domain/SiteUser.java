@@ -31,6 +31,7 @@ public class SiteUser {
     @Builder.Default //다 null로 들어가는데 기본값을 입력하면 기본 입력값으로 들어가게 됨.(빈 셋)
     private Set<InterestKeyword> interestKeywords = new HashSet<>();
     public void addInterestKeywordContent(String keywordContent) {
+        interestKeywords.add(new InterestKeyword(keywordContent));
 
     }
 

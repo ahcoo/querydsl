@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles("test")
-//        @Transactional //Test가 끝나고 롤백됨
+@Transactional //Test가 끝나고 롤백됨
 public class UserRepositoryTests {
 
         @Autowired
@@ -30,29 +30,21 @@ public class UserRepositoryTests {
         @DisplayName("회원 생성")
         void t1() {
 
-            SiteUser u3 = SiteUser.builder()
-                    .username("user3")
-                    .password("{noop}1234")
-                    .email("user3@test.com")
-                    .build();
-            SiteUser u4 = SiteUser.builder()
-                    .username("user4")
-                    .password("{noop}1234")
-                    .email("user4@test.com")
-                    .build();
             SiteUser u5 = SiteUser.builder()
                     .username("user5")
                     .password("{noop}1234")
                     .email("user5@test.com")
                     .build();
+
             SiteUser u6 = SiteUser.builder()
                     .username("user6")
                     .password("{noop}1234")
                     .email("user6@test.com")
                     .build();
 
-            userRepository.saveAll(Arrays.asList(u3, u4, u5, u6));
+            userRepository.saveAll(Arrays.asList(u5, u6));
             System.out.println("ArraysList : " + Arrays.asList());
+            System.out.println(userRepository.count());
         }
 
         @Test
@@ -71,7 +63,7 @@ public class UserRepositoryTests {
     void t3() {
         long count = userRepository.getQslUserCount();
         assertThat(count)
-                .isEqualTo(2);
+                .isEqualTo(4);
     }
 
 
@@ -85,30 +77,43 @@ public class UserRepositoryTests {
 
     @Test
     @DisplayName("회원에게 관심사 등록")
-    @Rollback(value = false)
+    @Rollback(false)
     void t5() {
-            SiteUser su = userRepository.findById(2L).orElseThrow();
+        SiteUser su2 = userRepository.findById(2L).orElseThrow();
 
-            su.addInterestKeywordContent("축구");
-            su.addInterestKeywordContent("농구");
-            su.addInterestKeywordContent("달리기");
-            su.addInterestKeywordContent("달리기");
+            su2.addInterestKeywordContent("축구");
+            su2.addInterestKeywordContent("농구");
+            su2.addInterestKeywordContent("달리기");
+            su2.addInterestKeywordContent("달리기");
+        userRepository.save(su2);
 
+        SiteUser su3 = userRepository.findById(3L).orElseThrow();
+            su3.addInterestKeywordContent("축구");
+            su3.addInterestKeywordContent("농구");
+            su3.addInterestKeywordContent("산책하기");
+            su3.addInterestKeywordContent("카페가기");
+        userRepository.save(su3);
 
     }
 
     @Test
-    @DisplayName("조인 테스트")
+    @DisplayName("축구가 관심사인 회원 검색")
     void t6() {
-            List<SiteUser> users = userRepository.getQslUsersByInterestkeyword("축구");
+            List<SiteUser> users = userRepository.getQslUsersByInterestKeyword("축구");
 
-        System.out.println(users.size());
+        assertThat(users.size())
+        .isEqualTo(2);
 
-        System.out.println("1번 : " + users.get(0).getUsername());
 
-//            assertThat(users.size());
+
     }
-
+    @Test
+    @DisplayName("spring data jpa로 축구가 관심사인 회원 검색")
+    void t7() {
+            List<SiteUser> users = userRepository.findByInterestKeywords_content("축구");
+            assertThat(users.size())
+                    .isEqualTo(2);
+}
 
 
     }

@@ -1,6 +1,7 @@
 package com.lecture.querydsl_exam.user.dao;
 
 
+import com.lecture.querydsl_exam.interestKeyword.domain.QInterestKeyword;
 import com.lecture.querydsl_exam.user.QSiteUser;
 import com.lecture.querydsl_exam.user.domain.SiteUser;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import static com.lecture.querydsl_exam.interestKeyword.domain.QInterestKeyword.interestKeyword;
 import static com.lecture.querydsl_exam.user.domain.QSiteUser.siteUser;
 
 @RequiredArgsConstructor
@@ -49,10 +51,13 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
     }
 
     @Override
-    public List<SiteUser> getQslUsersByInterestkeyword(String keywordContent) {
+    public List<SiteUser> getQslUsersByInterestKeyword(String keywordContent) {
         return jpaQueryFactory
-                .selectFrom(siteUser)
-                .innerJoin(siteUser.interestKeywords)
+                .select(siteUser)
+                .from(siteUser)
+                .innerJoin(siteUser.interestKeywords, interestKeyword)
+                .where(interestKeyword.content.eq(keywordContent))
+
                 .fetch();
     }
 }
